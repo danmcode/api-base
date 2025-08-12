@@ -1,32 +1,30 @@
-import { Server } from "http";
 import { App } from "./app";
 
-const app: App = new App();
-let server: Server;
+async function main(): Promise<void> {
+    const app = new App();
 
-const serverError = (err: NodeJS.ErrnoException): void => {
-    if (err.syscall !== 'listen') { throw err; }
-    throw err;
+    try {
+        await app.start();
+        console.log(`🚀 Server running on port ${app.getPort()}`);
+
+        // Graceful shutdown
+        process.on('SIGTERM', async () => {
+            await app.stop();
+            process.exit(0);
+        });
+
+        process.on('SIGINT', async () => {
+            await app.stop();
+            process.exit(0);
+        });
+
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
 }
 
-const serverListening = (): void => {
-    const addr = server.address();
-    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr?.port;
-    console.log('Listening on ' + bind);
-}
-
-app.init()
-    .then(() => {
-
-        app.express.set('port',
-            process.env.PORT || 3000
-        );
-
-        server = app.httpServer;
-        server.on('error', serverError);
-        server.on('listening', serverListening);
-        server.listen(3000);
-    })
-    .catch((err) => {
-        console.warn(err);
-    });
+main().catch((error) => {
+    console.error('Unhandled error:', error);
+    process.exit(1);
+});
