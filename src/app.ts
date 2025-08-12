@@ -1,5 +1,3 @@
-import express, { Application } from "express";
-import { Server } from "http";
 import { IApp } from "./interfaces/app.interface";
 import { IServer } from "./interfaces/server.interface";
 import { ServerConfig } from "./config/server.config";
@@ -32,6 +30,4 @@ export class App {
     public getPort(): number {
         return this.serverService.getPort();
     }
-
-
 }

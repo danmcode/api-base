@@ -1,8 +1,10 @@
+import { envConfig } from "./env.config";
+
 export class ServerConfig {
     private readonly port: number;
 
     constructor() {
-        this.port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+        this.port = envConfig.PORT;
     }
 
     public getPort(): number {
