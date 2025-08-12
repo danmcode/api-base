@@ -1,11 +1,12 @@
 import { App } from "./app";
+import { logger } from "./config/logger.config";
 
 async function main(): Promise<void> {
     const app = new App();
 
     try {
         await app.start();
-        console.log(`🚀 Server running on port ${app.getPort()}`);
+        logger.info(`🚀 Server running on port ${app.getPort()}`);
 
         // Graceful shutdown
         process.on('SIGTERM', async () => {
@@ -19,12 +20,12 @@ async function main(): Promise<void> {
         });
 
     } catch (error) {
-        console.error('Failed to start server:', error);
+        logger.error('Failed to start server:', error);
         process.exit(1);
     }
 }
 
 main().catch((error) => {
-    console.error('Unhandled error:', error);
+    logger.error('Unhandled error:', error);
     process.exit(1);
 });

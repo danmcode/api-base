@@ -1,10 +1,10 @@
-import { envConfig } from "./env.config";
+import { envs } from "./env.config";
 
 export class ServerConfig {
     private readonly port: number;
 
     constructor() {
-        this.port = envConfig.PORT;
+        this.port = envs.PORT;
     }
 
     public getPort(): number {

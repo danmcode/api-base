@@ -3,6 +3,7 @@ import { IServer } from "./interfaces/server.interface";
 import { ServerConfig } from "./config/server.config";
 import { ExpressAppService } from "./services/express.app.service";
 import { HttpServerService } from "./services/http.server.service";
+import { logger } from "./config/logger.config";
 
 export class App {
 
@@ -20,7 +21,9 @@ export class App {
     }
 
     public async start(): Promise<void> {
+        logger.info('🚀 Starting application...');
         await this.serverService.start();
+        logger.info('✅ Application started successfully');
     }
 
     public async stop(): Promise<void> {

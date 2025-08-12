@@ -2,6 +2,7 @@ import { Server } from "http";
 import { IServer } from "../interfaces/server.interface";
 import { IApp } from "../interfaces/app.interface";
 import { ServerConfig } from "../config/server.config";
+import { logger } from "../config/logger.config";
 
 
 export class HttpServerService implements IServer {
@@ -14,11 +15,17 @@ export class HttpServerService implements IServer {
     ) { }
 
     async start(): Promise<void> {
-        await this.app.initialize();
-        this.app.configure();
+        logger.info('Starting HTTP server...');
+        try {
+            await this.app.initialize();
+            this.app.configure();
 
-        this.server = new Server(this.app.getExpressApp());
-        this.server.listen(this.config.getPort());
+            this.server = new Server(this.app.getExpressApp());
+            this.server.listen(this.config.getPort());
+            logger.info('HTTP server started successfully');
+        } catch (error) {
+            logger.error('Failed to start HTTP server:', error);
+        }
     }
 
     async stop(): Promise<void> {
