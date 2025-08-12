@@ -1,4 +1,5 @@
 import { App } from "./app";
+import { envs } from "./config/env.config";
 import { logger } from "./config/logger.config";
 
 async function main(): Promise<void> {
@@ -6,7 +7,7 @@ async function main(): Promise<void> {
 
     try {
         await app.start();
-        logger.info(`🚀 Server running on port ${app.getPort()}`);
+        logger.info(`🚀 Server running on ${envs.BASE_URL}`);
 
         // Graceful shutdown
         process.on('SIGTERM', async () => {

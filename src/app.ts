@@ -23,7 +23,7 @@ export class App {
     public async start(): Promise<void> {
         logger.info('🚀 Starting application...');
         await this.serverService.start();
-        logger.info('✅ Application started successfully');
+
     }
 
     public async stop(): Promise<void> {
