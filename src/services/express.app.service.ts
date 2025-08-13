@@ -4,6 +4,7 @@ import express, {
     Response,
 } from "express";
 import { IApp } from "../interfaces/app.interface";
+import { registerRoutes } from "../routes/routes";
 
 
 export class ExpressAppService implements IApp {
@@ -29,22 +30,25 @@ export class ExpressAppService implements IApp {
 
     private setupRoutes(): void {
         this.expressApp.get('/', this.basePathRoute.bind(this));
-        this.expressApp.get('/health', this.healthCheck.bind(this));
+        this.expressApp.use('/api', registerRoutes())
+
+        this.expressApp.use(this.routeNotFound);
     }
 
     private basePathRoute(_: Request, res: Response): void {
-        res.json({
-            message: 'Base path works',
-            timestamp: new Date().toISOString()
-        })
-    }
-
-    private healthCheck(_: Request, res: Response): void {
-        res.json({
-            status: 'OK',
+        res.status(200).json({
+            message: 'Welcome to Danmcode API',
             timestamp: new Date().toISOString()
         });
     }
 
+    private routeNotFound(req: Request, res: Response){
+        res.status(404).json({
+            message: 'Route not found',
+            path: req.path,
+            method: req.method,
+            timestamp: new Date().toISOString()
+        })
+    }
 
 }

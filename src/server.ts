@@ -21,12 +21,13 @@ async function main(): Promise<void> {
         });
 
     } catch (error) {
+        console.log(error)
         logger.error('Failed to start server:', error);
         process.exit(1);
     }
 }
 
 main().catch((error) => {
-    logger.error('Unhandled error:', error);
+    logger.error('Main: Unhandled error:', error);
     process.exit(1);
 });
