@@ -31,7 +31,7 @@ const registerControllerRoutes = (routes: RouteDefinition[]): Router => {
 
 }
 
-export const  registerRoutes = () : Router => {
+export const registerRoutes = (): Router => {
 
     try {
         const router = Router();
@@ -47,12 +47,8 @@ export const  registerRoutes = () : Router => {
 
         return router;
 
-    } catch (error: any) {
-        logger.error('❌ Unable to register the routes');
-        logger.error(`Error name: ${error.name}`);
-        logger.error(`Error message: ${error.message}`);
-        logger.error(`Stack trace:\n${error.stack}`);
-        console.error(error)
+    } catch (error: unknown) {
+        if (error instanceof Error) logger.error('Route registration failed:', error.message);
         return Router()
     }
 

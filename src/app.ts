@@ -1,21 +1,24 @@
 import { IApp } from "./interfaces/app.interface";
 import { IServer } from "./interfaces/server.interface";
 import { ServerConfig } from "./config/server.config";
-import { ExpressAppService } from "./services/express.app.service";
 import { HttpServerService } from "./services/http.server.service";
 import { logger } from "./config/logger.config";
+import { ExpressAppFactory } from "./factories/express.app.factory";
+import { RouteConfigurator } from "./routes/route.configuration";
 
 export class App {
 
-    private readonly appService!: IApp;
+    private readonly appFactory: IApp;
+    private readonly routeConfigurator: RouteConfigurator;
     private readonly serverService: IServer;
     private readonly config: ServerConfig;
 
     constructor() {
         this.config = new ServerConfig();
-        this.appService = new ExpressAppService();
+        this.appFactory = new ExpressAppFactory();
+        this.routeConfigurator = new RouteConfigurator(this.appFactory.getExpressApp());
         this.serverService = new HttpServerService(
-            this.appService,
+            this.appFactory,
             this.config
         );
     }
@@ -23,6 +26,7 @@ export class App {
     public async start(): Promise<void> {
         logger.info('🚀 Starting application...');
         await this.serverService.start();
+        this.routeConfigurator.configureRoutes();
 
     }
 

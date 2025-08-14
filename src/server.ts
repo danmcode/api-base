@@ -9,7 +9,6 @@ async function main(): Promise<void> {
         await app.start();
         logger.info(`🚀 Server running on ${envs.BASE_URL}`);
 
-        // Graceful shutdown
         process.on('SIGTERM', async () => {
             await app.stop();
             process.exit(0);
@@ -21,9 +20,8 @@ async function main(): Promise<void> {
         });
 
     } catch (error) {
-        console.log(error)
         logger.error('Failed to start server:', error);
-        process.exit(1);
+        throw error;
     }
 }
 

@@ -18,13 +18,13 @@ export class HttpServerService implements IServer {
         logger.info('Starting HTTP server...');
         try {
             await this.app.initialize();
-            this.app.configure();
 
             this.server = new Server(this.app.getExpressApp());
             this.server.listen(this.config.getPort());
             logger.info('HTTP server started successfully');
         } catch (error) {
             logger.error('Failed to start HTTP server:', error);
+            throw error;
         }
     }
 
