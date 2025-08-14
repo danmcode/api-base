@@ -5,6 +5,7 @@ import express, {
 } from "express";
 import { IApp } from "../interfaces/app.interface";
 import { registerRoutes } from "../routes/routes";
+import { HttpStatus } from "../enums/http.status.enum";
 
 
 export class ExpressAppService implements IApp {
@@ -36,14 +37,14 @@ export class ExpressAppService implements IApp {
     }
 
     private basePathRoute(_: Request, res: Response): void {
-        res.status(200).json({
+        res.status(HttpStatus.OK).json({
             message: 'Welcome to Danmcode API',
             timestamp: new Date().toISOString()
         });
     }
 
-    private routeNotFound(req: Request, res: Response){
-        res.status(404).json({
+    private routeNotFound(req: Request, res: Response) {
+        res.status(HttpStatus.NOT_FOUND).json({
             message: 'Route not found',
             path: req.path,
             method: req.method,

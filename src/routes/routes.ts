@@ -1,11 +1,9 @@
 import { Router } from "express";
 import { RouteDefinition } from "../interfaces/route.definition";
-import { routesControllers } from "./routes.controllers";
-import BaseController from "../controllers/base.controller";
 import { logger } from "../config/logger.config";
+import { routeModules } from "./modules";
 
 const registerControllerRoutes = (routes: RouteDefinition[]): Router => {
-
     const controllerRouter = Router();
 
     routes.forEach((route) => {
@@ -28,28 +26,25 @@ const registerControllerRoutes = (routes: RouteDefinition[]): Router => {
     });
 
     return controllerRouter;
-
-}
+};
 
 export const registerRoutes = (): Router => {
-
     try {
         const router = Router();
 
-        const protectedRoutes = routesControllers;
-
-        protectedRoutes.forEach((controller: BaseController) => {
+        routeModules.forEach((module) => {
             router.use(
-                `/v1/${controller.basePath}`,
-                registerControllerRoutes(controller.routes())
+                `/v1/${module.basePath}`,
+                registerControllerRoutes(module.routes)
             );
+            logger.info(`Mounted routes for: /v1/${module.basePath}`);
         });
 
         return router;
-
     } catch (error: unknown) {
-        if (error instanceof Error) logger.error('Route registration failed:', error.message);
-        return Router()
+        if (error instanceof Error) {
+            logger.error('Route registration failed:', error.message);
+        }
+        return Router();
     }
-
-}
+};

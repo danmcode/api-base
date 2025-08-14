@@ -7,3 +7,8 @@ export interface RouteDefinition {
 	handler: (req: Request, res: Response, next: NextFunction) => void;
 	validator?: ValidationChain[];
 }
+
+export interface RouteModule {
+	basePath: string;
+	routes: RouteDefinition[];
+}
