@@ -6,6 +6,38 @@ import { ApiError } from '../interfaces/api.error.response';
 
 export default abstract class BaseController {
 
+	protected extractPaginationParams(req: Request): { page: number; limit: number } {
+		return {
+			page: parseInt(req.query.page as string) || 1,
+			limit: parseInt(req.query.limit as string) || 20
+		};
+	}
+
+	protected calculatePagination(page: number, limit: number, total: number): PaginationInfo {
+		return {
+			page,
+			limit,
+			total,
+			totalPages: Math.ceil(total / limit),
+			hasNext: page < Math.ceil(total / limit),
+			hasPrev: page > 1
+		};
+	}
+
+	protected handleServiceError(error: any, req: Request, res: Response, message: string = 'Service operation failed'): void {
+		const apiError: ApiError = {
+			success: false,
+			error: {
+				code: 'INTERNAL_SERVER_ERROR',
+				message,
+				timestamp: new Date().toISOString(),
+				path: req.path,
+				method: req.method
+			}
+		};
+		this.sendError(res, apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	protected sendSuccess<T>(
 		res: Response,
 		data: T,
