@@ -6,6 +6,7 @@ import express, {
 import { IApp } from "../interfaces/app.interface";
 import { registerRoutes } from "../routes/routes";
 import { HttpStatus } from "../enums/http.status.enum";
+import { MiddlewareService } from "./middleware.service";
 
 
 export class ExpressAppService implements IApp {
@@ -26,6 +27,7 @@ export class ExpressAppService implements IApp {
     }
 
     configure(): void {
+        MiddlewareService.setupMiddlewares(this.expressApp);
         this.setupRoutes();
     }
 
