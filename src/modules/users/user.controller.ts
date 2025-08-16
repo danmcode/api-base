@@ -9,11 +9,10 @@ import { logger } from "../../config/logger.config";
 
 export default class UserController extends BaseController {
 
-    userService: UserService;
-
-    constructor() {
+    constructor(
+        private readonly userService: UserService
+    ) {
         super();
-        this.userService = new UserService;
     }
 
     public async getUsers(req: Request, res: Response): Promise<void> {
