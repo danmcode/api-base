@@ -5,7 +5,6 @@ export class UserService {
 
     getUsers(page: number, limit: number): { users: IUser[], total: number } {
         const users = this.generateMockUsers(limit);
-        console.log('Service generated users:', users);
         const total = 100;
         return { users, total };
     }
